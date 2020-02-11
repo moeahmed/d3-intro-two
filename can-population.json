@@ -1,0 +1,57 @@
+{
+    "name":"Canada",
+    "children": [
+        {
+            "name":"Ontario",
+            "population":13448494
+        },
+        {
+            "name":"Quebec",
+            "population":8164361
+        },
+        {
+            "name":"British Columbia",
+            "population":4648055
+        },
+        {
+            "name":"Alberta",
+            "population":4067175
+        },
+        {
+            "name":"Manitoba",
+            "population":1278365
+        },
+        {
+            "name":"Saskatchewan",
+            "population":1098352
+        },
+        {
+            "name":"Nova Scotia",
+            "population":971395
+        },
+        {
+            "name":"New Brunswick",
+            "population":747101
+        },
+        {
+            "name":"Newfoundland and Labrador",
+            "population":519716
+        },
+        {
+            "name":"Prince Edward Island",
+            "population":142907
+        },
+        {
+            "name":"Northwest Territories",
+            "population":41786
+        },
+        {
+            "name":"Nunavut",
+            "population":35944
+        },
+        {
+            "name":"Yukon",
+            "population":35874
+        }
+    ]
+}

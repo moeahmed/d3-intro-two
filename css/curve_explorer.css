@@ -1,0 +1,71 @@
+#curve_explorer {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12px;
+	user-select: none;
+}
+#curve_explorer svg {
+	box-shadow: 0px 0px 40px -5px rgba(0,0,0,0.3);
+	border-radius: 5px;
+	margin: 20px;
+  background-color: white;
+}
+#curve_explorer svg path {
+	fill: none;
+}
+#curve_explorer svg circle {
+	fill: white;
+	stroke: #aaa;
+	cursor: move;
+}
+#curve_explorer svg .points-menu g {
+	opacity: 0.2;
+}
+#curve_explorer svg .points-menu g.active {
+	cursor: pointer;
+	opacity: 1;
+}
+#curve_explorer svg .points-menu line {
+	stroke: #777;
+	stroke-width: 3;
+}
+#curve_explorer svg .points-menu rect {
+	fill: white;
+}
+#curve_explorer .sidebar {
+	display: inline-block;
+	position: relative;
+	vertical-align: top;
+	margin-top: 20px;
+	width: 530px;
+	color: #444;
+}
+#curve_explorer .sidebar .header {
+	font-size: 14px;
+	font-weight: bold;
+	text-align: right;
+	color: #aaa;
+	width: 100%;
+}
+#curve_explorer .menu .item {
+	padding: 5px;
+	border: 1px solid #ddd;
+	margin: 4px 2px;
+	float: left;
+	cursor: pointer;
+	border-radius: 8px;
+	width: 160px;
+	text-align: center;
+}
+#curve_explorer .sidebar .info {
+	float: left;
+	margin-top: 20px;
+	line-height: 1.5em;
+}
+
+#curve_explorer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1300px;
+
+}

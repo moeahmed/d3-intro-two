@@ -1,0 +1,45 @@
+{ 
+    "children":[ 
+       { 
+          "name":"boss1",
+          "children":[ 
+             { 
+                "name":"mister_a",
+                "group":"A",
+                "value":28,
+                "colname":"level3"
+             },
+             { 
+                "name":"mister_b",
+                "group":"A",
+                "value":19,
+                "colname":"level3"
+             },
+             { 
+                "name":"mister_c",
+                "group":"C",
+                "value":18,
+                "colname":"level3"
+             },
+             { 
+                "name":"mister_d",
+                "group":"C",
+                "value":19,
+                "colname":"level3"
+             }
+          ],
+          "colname":"level2"
+       },
+       { 
+          "name":"boss2",
+          "children":[  ],
+          "colname":"level2"
+       },
+       { 
+          "name":"boss3",
+          "children":[  ],
+          "colname":"level2"
+       }
+    ],
+    "name":"CEO"
+ }

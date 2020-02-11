@@ -1,0 +1,27 @@
+pre code.tight {
+  font-size: 0.6em;
+  line-height: 1.2em;
+}
+
+object text {
+  font-family: sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+.reveal em {
+  color: #42affa;
+  font-style: normal;
+}
+
+.reveal .source {
+  font-size: 50%;
+}
+
+.reveal table {
+  font-size: .7em;
+}
+
+#ease_demo text{
+  fill: white;
+}

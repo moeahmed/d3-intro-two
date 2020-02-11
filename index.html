@@ -1,0 +1,393 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/mystyle.css">
+		<link rel="stylesheet" href="css/curve_explorer.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai-sublime.css">
+		<!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> -->
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel  = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+
+	<!-- Resources! -->
+	<!-- https://getfirebug.com/firebug-lite-debug.js -->
+
+
+
+	<body>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="js/phylotree.js"></script>
+		<script src="js/renderjson.js"></script>
+
+
+		<!-- <section data-markdown>
+			<textarea data-template>
+			</textarea>
+		</section> -->
+
+
+		<div class="reveal">
+			<div class="slides">
+
+				<section data-markdown>
+					<textarea data-template>
+
+						### CSCI 4210
+						## *Introduction to D3.js*
+						####  Part II - Layout and Animations
+
+
+						Instructor: Mohammed Ahmed
+						<br/>
+						Original slides by: Rafael Veras
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						This lecture introduces *layouts* and *animation*.
+					</textarea>
+				</section>
+
+				<section>
+					<img height="500" src="images/phylotree.jpg"/><br>
+					<span class="source">
+						Source: <a>https://www.nature.com/articles/nature08656/figures/1</a>
+					</span>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						> A *phylogenetic tree* or evolutionary tree is a branching diagram
+						or "tree" showing the inferred evolutionary relationships
+						among various biological species or other entities.
+					</textarea>
+				</section>
+
+				<section >
+					<div id="phylotree_json" style="height: 400px; overflow: scroll">
+						Data
+					</div>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						<iframe width="100%" height="500" src="//jsfiddle.net/moeahmed/72h8mjqe/8/embedded/result/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>						
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						<a href="http://tiny.cc/hhaujz">
+							tiny.cc/hhaujz
+						</a>
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						D3 Hierarchies
+
+						```javascript
+						var root = d3.hierarchy(data, function(d){
+							// return children
+						});
+
+						root.ancestors();   // array of internal nodes
+						root.leaves();      // array of leaf nodes
+						root.descendants(); // all nodes, in topological order
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						d3.tree
+
+						```javascript
+						var tree = d3.tree()	// creates a tree layout
+							         .size([width, height]);
+
+						tree(root);  // calculates the layout and
+						             // updates nodes with position info
+									 // nodes now have x and y
+						```
+					</textarea>
+				</section>
+
+
+				<section>
+					<p>Nodes now have meta information. Data object is 	wrapped in data attribute.</p>
+
+					<img src="images/tree_data.png"/><br>
+				</section>
+
+
+
+				<section data-markdown>
+					<textarea data-template>
+						### Drawing links
+
+						`d3.linkVertical` and `d3.linkHorizontal` produce cubic Bézier curves.
+
+						```javascript
+						var link = d3.linkHorizontal()
+							.x(function(d) { return d.y; })
+							.y(function(d) { return d.x; });
+
+						link({
+							source: {'x': 100, 'y': 100},
+							target: {'x': 300, 'y': 300}
+						}); // "M100,100C200,100,200,300,300,300"
+						```
+
+					</textarea>
+				</section>
+
+				<section>
+					<p>We can draw curves in SVG with the &lt;path&gt; element.</p>
+					<pre>
+						<code data-trim>
+							<path d="M10 10 H 90 V 90 H 10 L 10 10"></path>
+						</code>
+					</pre>
+
+					<svg>
+						<path d="M10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80" stroke="white" fill="transparent"/>
+					</svg>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						`hierarchy(data).links()` outputs exactly the kind of data that link
+						expects.
+
+						```javascript
+[
+	{
+	source: {
+		x: 1400
+		y: 20
+		data: ...
+		parent: ...
+		...
+		},
+		target: {
+			x: 1200
+		y: 120
+		data: ...
+		parent: ...
+		...
+		}
+	}
+	...
+]
+						```
+					</textarea>
+				</section>
+
+				<section>
+					  <h3>Tree (Tidy Layout) and Dendrogram</h3>
+						<img style="width: 400px" src="images/tree.png"/>
+						<img style="width: 400px" src="images/dendrogram.png"/>
+				</section>
+
+
+				<section data-markdown>
+					<textarea data-template>
+						Replace `d3.tree` with `d3.cluster` and you have a dendrogram.
+
+						```
+// Tree (with Tidy Layout)
+var tree = d3.tree()
+	.size([height, width-100]);
+
+// Dendrogram
+var dendrogram = d3.cluster()
+	.size([height, width-100]);
+						```
+					</textarea>
+				</section>
+
+				<section>
+					<p>d3.curve offers many options for drawing complex curves.</p>
+				</section>
+
+				<section>
+						<div id="curve_explorer">
+							<p class="source" style="font-size: 8pt">
+								Source: <a href="http://bl.ocks.org/d3indepth/raw/b6d4845973089bc1012dec1674d3aff8">
+									http://bl.ocks.org/d3indepth/raw/b6d4845973089bc1012dec1674d3aff8/
+								</a>
+							</p>
+						<svg width="700" height="400">
+
+					  	<g>
+					  		<path></path>
+					  		<g class="points-menu" transform="translate(660, 380)">
+					  			<g class="remove-point">
+					  				<rect x="-6" y="-6" width="12" height="12"></rect>
+					  				<line x1="-6" x2="6"></line>
+					  			</g>
+					  			<g class="add-point" transform="translate(20,0)">
+					  				<rect x="-6" y="-6" width="12" height="12"></rect>
+					  				<line x1="-6" x2="6"></line><line y1="-6" y2="6"></line>
+					  			</g>
+					  		</g>
+					  	</g>
+					  </svg>
+
+						  <div class="sidebar" style="width: 500px">
+						  	<div class="header">D3 CURVE EXPLORER</div>
+							  <div class="menu"></div>
+							  <div class="info">
+							  	<span class="default">The JavaScript library <a href="http://d3js.org">D3</a> provides a number of <a href="https://github.com/d3/d3-shape#curves">curve types</a> to interpolate (or approximate) a set of points. Toggle each of the curve types using the buttons above. You can also add/remove/drag the points to change the shape of the curve.</span>
+						  		<span class="text"></span>
+							  </div>
+							</div>
+						</div>
+				</section>
+
+
+				<section data-markdown>
+					<textarea data-template>
+						```
+						var myCurve = d3.line()
+						    .x(function(d) { return d.x; })  // tell d3 how to extract x coordinate
+						    .y(function(d) { return d.y; })
+						    .curve(d3.curveCatmullRom.alpha(0.5)); // desired curve (Catmull-Rom)
+
+						myCurve([                       // curve expects an array of points
+						         {'x': 10, 'y': 10},
+						         {'x': 20, 'y': 20},
+						         {'x': 30, 'y': 5}
+						        ])                      // this returns an appropriate value for
+						                                // path's d attribute
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## d3-transition
+
+						A transition is just like a selection where any *changes in attributes
+						get interpolated* over a given duration.
+
+						```
+						d3.select("body")
+							.transition()	 // from here on changes will be animated
+							  .style("background-color", "red");
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## Example
+						<iframe width="100%" height="300" src="//jsfiddle.net/rafa_veras/93mm92mh/embedded/result/" allowpaymentrequest allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+						<a href="http://tiny.cc/h18tjz">
+							tiny.cc/h18tjz
+						</a>
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+					  ## Transition attributes
+					</textarea>
+				</section>
+
+				<section>
+					<h3>Ease</h3>
+					<p class="source"> Source:
+						<a href="https://bl.ocks.org/d3noob/1ea51d03775b9650e8dfd03474e202fe">
+							https://bl.ocks.org/d3noob/1ea51d03775b9650e8dfd03474e202fe
+						</a>
+					</p>
+					<div id="ease_demo">
+					</div>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						```
+						d3.transition()
+						  .duration(2000)
+						  .delay(1000)
+						  .ease(d3.easeQuad)
+						  .on('start', function(d,i){
+						        // do something on start
+						    })
+						  .on('end', function(d,i){
+						        // do something on end
+						    });
+						```
+					</textarea>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						## Your Turn
+					</textarea>
+				</section>
+
+				<section>
+					<h2>Treemap</h2>
+					<img src="images/treemap-provinces.png"/>
+				</section>
+
+				<section data-markdown>
+					<textarea data-template>
+						<a href="http://tiny.cc/kb8tjz
+						">
+							tiny.cc/kb8tjz
+						</a>
+					</textarea>
+				</section>
+
+			</div>
+		</div>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				slideNumber: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+
+			renderjson.set_show_to_level(3);
+			document.getElementById("phylotree_json").appendChild(
+					renderjson(phylotree));
+
+		</script>
+		<script src="js/curvexplorer.js"></script>
+		<script src="js/ease_demo.js"></script>
+	</body>
+</html>
